@@ -1,0 +1,28 @@
+digraph {
+  
+  node[style = filled,
+       fontname = "helvetica"]
+  
+  # Nodes
+  raw_data[label = "Raw data", shape = square, color = Brown];
+  tidy_data[label = "Tidy data", shape = square, color = Green];
+  results[label = "Results", shape = square, color = Green];
+  reports[label = "Reports", shape = square, color = Green];
+  
+  validation[label = "Validation", shape = diamond];
+  pre_processing[label = "Pre-processing"];
+  produce_results[label = "Produce results"];
+  make_reports[label = "Make reports"];
+  
+  stop[label = "Stop", shape = plaintext]
+  
+  # Edges
+  raw_data -> validation;
+  validation -> pre_processing[label = "ok"];
+  validation -> stop[label = "error"];
+  pre_processing -> tidy_data;
+  tidy_data -> produce_results;
+  produce_results -> results;
+  results -> make_reports;
+  make_reports -> reports
+}
