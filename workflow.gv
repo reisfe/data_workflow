@@ -4,25 +4,35 @@ digraph {
        fontname = "helvetica"]
   
   # Nodes
-  raw_data[label = "Raw data", shape = square, color = Brown];
-  tidy_data[label = "Tidy data", shape = square, color = Green];
-  results[label = "Results", shape = square, color = Green];
-  reports[label = "Reports", shape = square, color = Green];
+  ## External entities
+  data_source[label = "External\ndata source", shape = square, color = Brown];
   
-  validation[label = "Validation", shape = diamond];
-  pre_processing[label = "Pre-processing"];
+  ## Data stores
+  raw_data_store[label = "./data/raw", shape = square, color = Green];
+  tidy_data_store[label = "./data/tidy", shape = square, color = Green];
+  results_store[label = "./results", shape = square, color = Green];
+  reports_store[label = "./reports", shape = square, color = Green];
+  
+  ## Processes (scripts)
+  acquire_data[label = "./scripts/R/get_raw_data.R"]
+  validate_data[label = "Validation"];
+  pre_process[label = "./scripts/R/pre_processing.R"];
   produce_results[label = "Produce results"];
-  make_reports[label = "Make reports"];
+  make_reports[label = "Make reports\n(makefile)"];
   
-  stop[label = "Stop", shape = plaintext]
+  stop[label = "Stop", shape = circle, color = Red]
   
-  # Edges
-  raw_data -> validation;
-  validation -> pre_processing[label = "ok"];
-  validation -> stop[label = "error"];
-  pre_processing -> tidy_data;
-  tidy_data -> produce_results;
-  produce_results -> results;
-  results -> make_reports;
-  make_reports -> reports
+  # Edges (data flows)
+  data_source -> acquire_data[label = "raw\ndata"]
+  acquire_data -> raw_data_store[label = "raw\ndata"]
+  raw_data_store -> validate_data[label = "raw\ndata"];
+  validate_data -> pre_process[label = "ok"];
+  validate_data -> stop[label = "error"];
+  raw_data_store -> pre_process[label = "raw\ndata"]
+  pre_process -> tidy_data_store[label = "tidy\ndata"];
+  tidy_data_store -> produce_results[label = "tidy\ndata"];
+  produce_results -> results_store[label = "statistics"];
+  results_store -> make_reports[label = "statistics"];
+  tidy_data_store -> make_reports[label = "tidy\ndata"];
+  make_reports -> reports_store[label = "HTML & PDF reports"];
 }
