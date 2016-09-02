@@ -15,7 +15,7 @@ digraph {
   
   ## Processes (scripts)
   acquire_data[label = "./scripts/R/get_raw_data.R"]
-  validate_data[label = "Validation"];
+  validate_data[label = "./scripts/R/validate.R"];
   pre_process[label = "./scripts/R/pre_processing.R"];
   produce_results[label = "Produce results"];
   make_reports[label = "Make reports\n(makefile)"];
